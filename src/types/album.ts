@@ -4,6 +4,8 @@ export type AlbumStatus =
   | 'Listened'
   | 'Dropped'
 
+export type AlbumFilter = AlbumStatus | 'All'
+
 export interface Album {
   id: string
   title: string
