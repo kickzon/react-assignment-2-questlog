@@ -6,6 +6,7 @@ export function useAlbum(id: string | undefined) {
   const [album, setAlbum] = useState<Album | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     if (!id) {
@@ -52,11 +53,16 @@ export function useAlbum(id: string | undefined) {
     return () => {
       controller.abort();
     };
-  }, [id]);
+  }, [id, refreshKey]);
+
+  function refetch() {
+    setRefreshKey((currentKey) => currentKey + 1);
+  }
 
   return {
     album: id ? album : null,
     isLoading: id ? isLoading : false,
     error: id ? error : "Missing album id",
+    refetch,
   };
 }

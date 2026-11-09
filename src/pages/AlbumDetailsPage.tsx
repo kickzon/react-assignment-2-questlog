@@ -1,16 +1,51 @@
-import { Link, useParams } from "react-router-dom";
-import { useAlbum } from "../hooks/useAlbum";
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import AlbumActions from '../components/AlbumActions'
+import { useAlbum } from '../hooks/useAlbum'
+import { useSaveAlbum } from '../hooks/useSaveAlbum'
+import type { AlbumChanges } from '../types/album'
 
 function AlbumDetailsPage() {
-  const { albumId } = useParams<{ albumId: string }>();
-  const { album, isLoading, error } = useAlbum(albumId);
+  const { albumId } = useParams<{ albumId: string }>()
+  const navigate = useNavigate()
+
+  const { album, isLoading, error, refetch } = useAlbum(albumId)
+  const {
+    updateAlbum,
+    deleteAlbum,
+    isSaving,
+    error: saveError,
+  } = useSaveAlbum()
+
+  async function handleUpdate(changes: AlbumChanges) {
+    if (!albumId) {
+      return
+    }
+
+    const updatedAlbum = await updateAlbum(albumId, changes)
+
+    if (updatedAlbum) {
+      refetch()
+    }
+  }
+
+  async function handleDelete() {
+    if (!albumId) {
+      return
+    }
+
+    const wasDeleted = await deleteAlbum(albumId)
+
+    if (wasDeleted) {
+      navigate('/')
+    }
+  }
 
   if (isLoading) {
     return (
       <section>
         <p>Loading album...</p>
       </section>
-    );
+    )
   }
 
   if (error) {
@@ -19,7 +54,7 @@ function AlbumDetailsPage() {
         <p role="alert">{error}</p>
         <Link to="/">Back to albums</Link>
       </section>
-    );
+    )
   }
 
   if (!album) {
@@ -28,7 +63,7 @@ function AlbumDetailsPage() {
         <p>Album not found.</p>
         <Link to="/">Back to albums</Link>
       </section>
-    );
+    )
   }
 
   return (
@@ -65,8 +100,18 @@ function AlbumDetailsPage() {
           </ul>
         </>
       )}
+
+      {saveError && <p role="alert">{saveError}</p>}
+
+      <AlbumActions
+        key={album.id}
+        album={album}
+        isSaving={isSaving}
+        onUpdate={handleUpdate}
+        onDelete={handleDelete}
+      />
     </section>
-  );
+  )
 }
 
-export default AlbumDetailsPage;
+export default AlbumDetailsPage
