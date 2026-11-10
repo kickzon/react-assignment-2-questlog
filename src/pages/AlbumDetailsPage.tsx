@@ -1,107 +1,149 @@
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import AlbumActions from '../components/AlbumActions'
-import { useAlbum } from '../hooks/useAlbum'
-import { useSaveAlbum } from '../hooks/useSaveAlbum'
-import type { AlbumChanges } from '../types/album'
+import { Link, useNavigate, useParams } from "react-router-dom";
+import AlbumActions from "../components/AlbumActions";
+import { useAlbum } from "../hooks/useAlbum";
+import { useSaveAlbum } from "../hooks/useSaveAlbum";
+import type { AlbumChanges } from "../types/album";
 
 function AlbumDetailsPage() {
-  const { albumId } = useParams<{ albumId: string }>()
-  const navigate = useNavigate()
+  const { albumId } = useParams<{ albumId: string }>();
+  const navigate = useNavigate();
 
-  const { album, isLoading, error, refetch } = useAlbum(albumId)
+  const { album, isLoading, error, refetch } = useAlbum(albumId);
   const {
     updateAlbum,
     deleteAlbum,
     isSaving,
     error: saveError,
-  } = useSaveAlbum()
+  } = useSaveAlbum();
 
   async function handleUpdate(changes: AlbumChanges) {
     if (!albumId) {
-      return
+      return;
     }
 
-    const updatedAlbum = await updateAlbum(albumId, changes)
+    const updatedAlbum = await updateAlbum(albumId, changes);
 
     if (updatedAlbum) {
-      refetch()
+      refetch();
     }
   }
 
   async function handleDelete() {
     if (!albumId) {
-      return
+      return;
     }
 
-    const wasDeleted = await deleteAlbum(albumId)
+    const wasDeleted = await deleteAlbum(albumId);
 
     if (wasDeleted) {
-      navigate('/')
+      navigate("/");
     }
   }
 
   if (isLoading) {
-    return (
-      <section>
-        <p>Loading album...</p>
-      </section>
-    )
+    return <p className="status-message">Loading album...</p>;
   }
 
   if (error) {
     return (
-      <section>
-        <p role="alert">{error}</p>
-        <Link to="/">Back to albums</Link>
+      <section className="details-page">
+        <p className="status-message error-message" role="alert">
+          {error}
+        </p>
+        <Link className="back-link" to="/">
+          Back to albums
+        </Link>
       </section>
-    )
+    );
   }
 
   if (!album) {
     return (
-      <section>
-        <p>Album not found.</p>
-        <Link to="/">Back to albums</Link>
+      <section className="details-page">
+        <div className="empty-state">
+          <h1>Album not found</h1>
+          <p>The requested album could not be found.</p>
+        </div>
+        <Link className="back-link" to="/">
+          Back to albums
+        </Link>
       </section>
-    )
+    );
   }
 
   return (
-    <section>
-      <Link to="/">Back to albums</Link>
+    <section className="details-page">
+      <Link className="back-link" to="/">
+        ← Back to albums
+      </Link>
 
-      {album.imageUrl && (
-        <img src={album.imageUrl} alt={`Cover artwork for ${album.title}`} />
+      <div className="details-layout">
+        {album.imageUrl ? (
+          <img
+            className="details-cover"
+            src={album.imageUrl}
+            alt={`Cover artwork for ${album.title}`}
+          />
+        ) : (
+          <div
+            className="details-cover details-cover-placeholder"
+            aria-hidden="true"
+          >
+            ♪
+          </div>
+        )}
+
+        <div className="details-content">
+          <span className="status-badge">{album.status}</span>
+          <h1>{album.title}</h1>
+          <p className="details-artist">{album.subtitle}</p>
+
+          <dl className="album-metadata">
+            <div>
+              <dt>Genre</dt>
+              <dd>{album.category}</dd>
+            </div>
+
+            {album.rating != null && (
+              <div>
+                <dt>Rating</dt>
+                <dd>{album.rating}/5</dd>
+              </div>
+            )}
+
+            {album.date && (
+              <div>
+                <dt>Date listened</dt>
+                <dd>{album.date}</dd>
+              </div>
+            )}
+          </dl>
+
+          {album.notes && (
+            <div className="details-section">
+              <h2>Notes</h2>
+              <p>{album.notes}</p>
+            </div>
+          )}
+
+          {album.tags.length > 0 && (
+            <div className="details-section">
+              <h2>Tags</h2>
+              <ul className="tag-list">
+                {album.tags.map((tag) => (
+                  <li key={tag}>{tag}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {saveError && (
+        <p className="status-message error-message" role="alert">
+          {saveError}
+        </p>
       )}
-
-      <h1>{album.title}</h1>
-      <p>Artist: {album.subtitle}</p>
-      <p>Genre: {album.category}</p>
-      <p>Status: {album.status}</p>
-
-      {album.rating != null && <p>Rating: {album.rating}/5</p>}
-
-      {album.date && <p>Date completed: {album.date}</p>}
-
-      {album.notes && (
-        <>
-          <h2>Notes</h2>
-          <p>{album.notes}</p>
-        </>
-      )}
-
-      {album.tags.length > 0 && (
-        <>
-          <h2>Tags</h2>
-          <ul>
-            {album.tags.map((tag) => (
-              <li key={tag}>{tag}</li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      {saveError && <p role="alert">{saveError}</p>}
 
       <AlbumActions
         key={album.id}
@@ -111,7 +153,7 @@ function AlbumDetailsPage() {
         onDelete={handleDelete}
       />
     </section>
-  )
+  );
 }
 
-export default AlbumDetailsPage
+export default AlbumDetailsPage;

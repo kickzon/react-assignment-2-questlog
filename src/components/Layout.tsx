@@ -1,23 +1,42 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet } from "react-router-dom";
 
 function Layout() {
   return (
     <>
-      <header>
-        <nav aria-label="Main navigation">
-          <NavLink to="/" end>
+      <header className="app-header">
+        <nav className="app-nav" aria-label="Main navigation">
+          <NavLink className="brand" to="/" end>
             SoundShelf
           </NavLink>
 
-          <NavLink to="/albums/new">Add album</NavLink>
+          <div className="nav-links">
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+              to="/"
+              end
+            >
+              Albums
+            </NavLink>
+
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+              to="/albums/new"
+            >
+              Add album
+            </NavLink>
+          </div>
         </nav>
       </header>
 
-      <main>
+      <main className="app-main">
         <Outlet />
       </main>
     </>
-  )
+  );
 }
 
-export default Layout
+export default Layout;
