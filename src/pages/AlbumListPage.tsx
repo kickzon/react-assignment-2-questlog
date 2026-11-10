@@ -12,8 +12,15 @@ function AlbumListPage() {
   const { albums, isLoading, error } = useAlbums(apiStatus)
 
   return (
-    <section>
-      <h1>My albums</h1>
+    <section className="albums-page">
+      <header className="page-heading">
+        <p className="eyebrow">Your personal listening log</p>
+        <h1>My albums</h1>
+        <p className="page-introduction">
+          Save albums, track your listening progress and remember your
+          favourites.
+        </p>
+      </header>
 
       <StatusFilter
         selectedStatus={selectedStatus}
@@ -21,13 +28,18 @@ function AlbumListPage() {
       />
 
       {isLoading ? (
-        <p>Loading albums...</p>
+        <p className="status-message">Loading albums...</p>
       ) : error ? (
-        <p role="alert">{error}</p>
+        <p className="status-message error-message" role="alert">
+          {error}
+        </p>
       ) : albums.length === 0 ? (
-        <p>No albums found for this status.</p>
+        <div className="empty-state">
+          <h2>No albums found</h2>
+          <p>Try another status or add a new album to your shelf.</p>
+        </div>
       ) : (
-        <div>
+        <div className="album-grid">
           {albums.map((album) => (
             <AlbumCard key={album.id} album={album} />
           ))}

@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import type { FormEvent } from 'react'
-import type { Album, AlbumChanges, AlbumStatus } from '../types/album'
+import { useState } from "react";
+import type { FormEvent } from "react";
+import type { Album, AlbumChanges, AlbumStatus } from "../types/album";
 
 interface AlbumActionsProps {
-  album: Album
-  isSaving: boolean
-  onUpdate: (changes: AlbumChanges) => Promise<void>
-  onDelete: () => Promise<void>
+  album: Album;
+  isSaving: boolean;
+  onUpdate: (changes: AlbumChanges) => Promise<void>;
+  onDelete: () => Promise<void>;
 }
 
 function AlbumActions({
@@ -15,43 +15,41 @@ function AlbumActions({
   onUpdate,
   onDelete,
 }: AlbumActionsProps) {
-  const [status, setStatus] = useState<AlbumStatus>(album.status)
+  const [status, setStatus] = useState<AlbumStatus>(album.status);
   const [rating, setRating] = useState(
-    album.rating === null ? '' : String(album.rating),
-  )
+    album.rating === null ? "" : String(album.rating),
+  );
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+    event.preventDefault();
 
     await onUpdate({
       status,
-      rating: rating === '' ? null : Number(rating),
-    })
+      rating: rating === "" ? null : Number(rating),
+    });
   }
 
   async function handleDelete() {
     const shouldDelete = window.confirm(
       `Are you sure you want to delete "${album.title}"?`,
-    )
+    );
 
     if (shouldDelete) {
-      await onDelete()
+      await onDelete();
     }
   }
 
   return (
-    <section>
+    <section className="album-actions">
       <h2>Edit album</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form className="edit-form" onSubmit={handleSubmit}>
+        <div className="form-field">
           <label htmlFor="edit-status">Status</label>
           <select
             id="edit-status"
             value={status}
-            onChange={(event) =>
-              setStatus(event.target.value as AlbumStatus)
-            }
+            onChange={(event) => setStatus(event.target.value as AlbumStatus)}
           >
             <option value="Want to listen">Want to listen</option>
             <option value="Listening">Listening</option>
@@ -60,7 +58,7 @@ function AlbumActions({
           </select>
         </div>
 
-        <div>
+        <div className="form-field">
           <label htmlFor="edit-rating">Rating</label>
           <select
             id="edit-rating"
@@ -76,16 +74,21 @@ function AlbumActions({
           </select>
         </div>
 
-        <button type="submit" disabled={isSaving}>
-          {isSaving ? 'Saving...' : 'Save changes'}
+        <button className="primary-button" type="submit" disabled={isSaving}>
+          {isSaving ? "Saving..." : "Save changes"}
         </button>
       </form>
 
-      <button type="button" onClick={handleDelete} disabled={isSaving}>
+      <button
+        className="danger-button"
+        type="button"
+        onClick={handleDelete}
+        disabled={isSaving}
+      >
         Delete album
       </button>
     </section>
-  )
+  );
 }
 
-export default AlbumActions
+export default AlbumActions;
