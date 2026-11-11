@@ -215,6 +215,9 @@ p {
 
 .album-card:hover {
   border-color: var(--color-accent);
+  box-shadow:
+    var(--shadow-card),
+    0 0 1.5rem var(--color-accent-glow-soft);
   transform: translateY(-0.3rem);
 }
 
@@ -248,7 +251,7 @@ p {
   overflow: hidden;
   padding: 0.35rem 0.6rem;
   border-radius: 999px;
-  background-color: rgb(227 75 95 / 14%);
+  background-color: rgb(var(--color-accent-rgb) / 14%);
   color: var(--color-accent-hover);
   font-size: 0.75rem;
   font-weight: 800;
@@ -346,7 +349,7 @@ p {
 .form-field textarea:focus {
   border-color: var(--color-accent);
   outline: none;
-  box-shadow: 0 0 0 3px rgb(227 75 95 / 20%);
+  box-shadow: 0 0 0 3px rgb(var(--color-accent-rgb)/ 20%);
 }
 
 .form-field textarea {
@@ -631,6 +634,46 @@ p {
 .primary-link:focus-visible {
   outline: 3px solid var(--color-accent-hover);
   outline-offset: 3px;
+}
+
+@keyframes accent-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0.6rem var(--color-accent-glow),
+      0 0 1.4rem var(--color-accent-glow-soft);
+  }
+
+  50% {
+    box-shadow:
+      0 0 1rem var(--color-accent-glow),
+      0 0 2.5rem var(--color-accent-glow-soft);
+  }
+}
+
+.filter-button[aria-pressed="true"],
+.primary-button:not(:disabled),
+.primary-link {
+  box-shadow: var(--shadow-accent);
+}
+
+.filter-button[aria-pressed="true"] {
+  animation: accent-pulse 3s ease-in-out infinite;
+}
+
+.primary-button:hover:not(:disabled),
+.primary-link:hover {
+  box-shadow:
+    0 0 1rem var(--color-accent-glow),
+    0 0 2.75rem var(--color-accent-glow-soft);
+}
+
+.eyebrow,
+.status-badge,
+.error-code {
+  text-shadow:
+    0 0 0.75rem var(--color-accent-glow),
+    0 0 1.5rem var(--color-accent-glow-soft);
 }
 
 @media (prefers-reduced-motion: reduce) {

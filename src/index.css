@@ -16,10 +16,16 @@
   --color-surface-light: #28222d;
   --color-text: #f8f4ee;
   --color-muted: #b9afbd;
+  --color-accent-rgb: 255 103 0;
   --color-accent: #ff6700;
-  --color-accent-hover: #ff6700;
+  --color-accent-hover: #ff8a3d;
   --color-border: #3a313f;
   --shadow-card: 0 1rem 2.5rem rgb(0 0 0 / 25%);
+  --color-accent-glow: rgb(var(--color-accent-rgb) / 45%);
+  --color-accent-glow-soft: rgb(var(--color-accent-rgb) / 18%);
+  --shadow-accent:
+    0 0 0.75rem var(--color-accent-glow),
+    0 0 2rem var(--color-accent-glow-soft);
 }
 
 * {
@@ -33,7 +39,7 @@ body {
   background:
     radial-gradient(
       circle at top left,
-      rgb(227 75 95 / 12%),
+      rgb(var(--color-accent-rgb) / 12%),
       transparent 30rem
     ),
     var(--color-background);
