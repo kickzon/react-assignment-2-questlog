@@ -146,7 +146,7 @@ Hooken använder en generisk TypeScript-typ, vilket gör att den kan återanvän
 
 Jag valde att samla API-logiken i custom hooks för att separera datahanteringen från appens komponenter. Det gör komponenterna mer lättlästa och hooksen kan återanvändas på flera ställen.
 
-Jag har delat upp formulären efter deras olika ansvarsområden. AlbumForm används för att skapa ett nytt album med all albuminformation, medan AlbumActions används för att uppdatera status och betyg eller ta bort ett befintligt album. Det gör komponenternas ansvar tydligare. Det minskar mängden upprepad kod och gör att samma validering och formulärfält används på båda platserna.
+Jag har delat upp formulären efter deras olika ansvarsområden. AlbumForm används för att skapa ett nytt album med all albuminformation, medan AlbumActions används för att uppdatera status och betyg eller ta bort ett befintligt album. Det gör komponenternas ansvar tydligare.
 
 Jag använder TypeScript-typer för album, status, nya album och uppdateringar. Det hjälper mig att upptäcka fel under utvecklingen och gör det tydligare vilken data komponenterna och API-funktionerna förväntar sig.
 
