@@ -1,75 +1,159 @@
-# React + TypeScript + Vite
+# SoundShelf
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+SoundShelf är en musikapp där användaren kan skapa och hantera en personlig samling av album. Appen är byggd med React och TypeScript och använder Shelf API för att lagra informationen.
 
-Currently, two official plugins are available:
+Detta projekt är skapat som inlämningsuppgift 2 i kursen JavaScript-ramverk. Jag siktar på betyget VG.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Funktioner
 
-## React Compiler
+I appen kan användaren:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Visa alla album i samlingen
+- Filtrera album efter lyssningsstatus
+- Visa information om ett enskilt album
+- Lägga till nya album
+- Redigera befintliga album
+- Ta bort album
+- Ange betyg, genre, omslagsbild, datum, anteckningar och taggar
+- Behålla det valda filtret efter att sidan har laddats om
+- Få återkoppling när data laddas eller om något går fel
 
-## Expanding the ESLint configuration
+Albumen kan ha följande status:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Want to listen
+- Listening
+- Listened
+- Dropped
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Tekniker
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Projektet använder:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- React
+- TypeScript
+- React Router
+- Vite
+- Shelf API
+- CSS
+- ESLint
+- Local Storage
 
+## Installation
+
+För att köra projektet lokalt behöver du ha Node.js och npm installerat.
+
+1. Klona repot:
+
+```bash
+git clone https://github.com/kickzon/react-assignment-2-questlog.git
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+2. Gå till projektets mapp:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+cd react-assignment-2-questlog
 ```
+
+3. Installera projektets dependencies:
+
+```bash
+npm install
+```
+
+4. Starta utvecklingsservern:
+
+```bash
+npm run dev
+```
+
+Öppna sedan adressen som visas i terminalen, vanligtvis `http://localhost:5173`.
+
+## Scripts
+
+```bash
+npm run dev
+```
+
+Startar projektet i utvecklingsläge.
+
+```bash
+npm run build
+```
+
+Kontrollerar TypeScript och skapar en produktionsversion av appen.
+
+```bash
+npm run lint
+```
+
+Kontrollerar koden med ESLint.
+
+```bash
+npm run preview
+```
+
+Förhandsvisar den färdiga produktionsversionen lokalt.
+
+## API
+
+Appen använder [Shelf API](https://shelf-api-mu.vercel.app/docs) för att hämta och spara album.
+
+Mitt handle i API:et är:
+
+```text
+kickzon-music
+```
+
+Appen använder följande typer av API-anrop:
+
+- `GET` för att hämta album
+- `POST` för att skapa album
+- `PATCH` för att uppdatera album
+- `DELETE` för att ta bort album
+
+## Routing
+
+Appen innehåller följande routes:
+
+- `/` – visar alla album och statusfiltret
+- `/albums/new` – visar formuläret för att lägga till ett album
+- `/albums/:albumId` – visar information om ett enskilt album
+- `*` – visar en 404-sida när adressen inte finns
+
+## Custom hooks
+
+Jag har flyttat logiken för API-anrop och Local Storage till egna hooks. På så sätt ansvarar komponenterna främst för vad som ska visas, medan hooksen hanterar data och state.
+
+### `useAlbums`
+
+Hämtar listan med album från API:et. Hooken kan även ta emot en status och hämta de album som tillhör det valda filtret. Den hanterar också laddning, fel och avbryter anropet om komponenten tas bort.
+
+### `useAlbum`
+
+Hämtar ett enskilt album med hjälp av albumets id. Hooken innehåller även en `refetch`-funktion som gör att albumet kan hämtas på nytt efter en uppdatering.
+
+### `useSaveAlbum`
+
+Samlar funktionerna för att skapa, uppdatera och ta bort album. Hooken hanterar även sparningsstatus och fel från API:et.
+
+### `useLocalStorage`
+
+Sparar det valda statusfiltret i webbläsarens Local Storage. Det gör att samma filter fortfarande är valt när användaren laddar om sidan.
+
+Hooken använder en generisk TypeScript-typ, vilket gör att den kan återanvändas för olika typer av värden.
+
+## Val och motiveringar
+
+Jag valde att samla API-logiken i custom hooks för att separera datahanteringen från appens komponenter. Det gör komponenterna mer lättlästa och hooksen kan återanvändas på flera ställen.
+
+Formuläret används både när ett album skapas och när ett befintligt album redigeras. Det minskar mängden upprepad kod och gör att samma validering och formulärfält används på båda platserna.
+
+Jag använder TypeScript-typer för album, status, nya album och uppdateringar. Det hjälper mig att upptäcka fel under utvecklingen och gör det tydligare vilken data komponenterna och API-funktionerna förväntar sig.
+
+Statusfiltret sparas med en separat Local Storage-hook eftersom filtret ska finnas kvar efter en omladdning utan att behöva sparas i API:et.
+
+## Publicerad app
+
+Appen är publicerad på Vercel:
+
+[https://react-assignment-2-questlog.vercel.app/](https://react-assignment-2-questlog.vercel.app/)
