@@ -3,6 +3,7 @@ import AlbumActions from "../components/AlbumActions";
 import { useAlbum } from "../hooks/useAlbum";
 import { useSaveAlbum } from "../hooks/useSaveAlbum";
 import type { AlbumChanges } from "../types/album";
+import StatusIcon from "../components/StatusIcon";
 
 function AlbumDetailsPage() {
   const { albumId } = useParams<{ albumId: string }>();
@@ -94,7 +95,10 @@ function AlbumDetailsPage() {
         )}
 
         <div className="details-content">
-          <span className="status-badge">{album.status}</span>
+          <span className="status-badge">
+            <StatusIcon status={album.status} />
+            {album.status}
+          </span>
           <h1>{album.title}</h1>
           <p className="details-artist">{album.subtitle}</p>
 

@@ -1,8 +1,9 @@
-import { Link } from 'react-router-dom'
-import type { Album } from '../types/album'
+import { Link } from "react-router-dom";
+import type { Album } from "../types/album";
+import StatusIcon from "./StatusIcon";
 
 interface AlbumCardProps {
-  album: Album
+  album: Album;
 }
 
 function AlbumCard({ album }: AlbumCardProps) {
@@ -22,7 +23,10 @@ function AlbumCard({ album }: AlbumCardProps) {
 
       <div className="album-card-content">
         <div className="album-card-heading">
-          <span className="status-badge">{album.status}</span>
+          <span className="status-badge">
+            <StatusIcon status={album.status} />
+            {album.status}
+          </span>
 
           {album.rating != null && (
             <span className="album-rating">{album.rating}/5</span>
@@ -39,7 +43,7 @@ function AlbumCard({ album }: AlbumCardProps) {
         <p className="album-genre">{album.category}</p>
       </div>
     </article>
-  )
+  );
 }
 
-export default AlbumCard
+export default AlbumCard;
