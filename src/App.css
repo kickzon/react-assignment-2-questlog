@@ -95,6 +95,10 @@ p {
     flex: 1;
     text-align: center;
   }
+
+  .hero-icon {
+    display: none;
+  }
 }
 
 .page-heading {
@@ -648,6 +652,40 @@ p {
 .primary-link:focus-visible {
   outline: 3px solid var(--color-accent-hover);
   outline-offset: 3px;
+}
+
+.album-page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  max-width: none;
+}
+
+.album-page-heading-content {
+  max-width: 42rem;
+}
+
+.hero-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  margin-top: 0.15rem;
+  color: var(--color-accent-hover);
+  filter:
+    drop-shadow(0 0 0.5rem var(--color-accent-glow))
+    drop-shadow(0 0 1.25rem var(--color-accent-glow-soft));
+  animation: hero-float 4s ease-in-out infinite;
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-0.35rem) scale(1.03);
+  }
 }
 
 @keyframes accent-pulse {
