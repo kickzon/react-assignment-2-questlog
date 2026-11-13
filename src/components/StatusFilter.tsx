@@ -1,4 +1,6 @@
 import type { AlbumFilter } from "../types/album";
+import { ListMusic } from "lucide-react";
+import StatusIcon from "./StatusIcon";
 
 interface StatusFilterProps {
   selectedStatus: AlbumFilter;
@@ -25,6 +27,16 @@ function StatusFilter({ selectedStatus, onStatusChange }: StatusFilterProps) {
               aria-pressed={selectedStatus === status}
               onClick={() => onStatusChange(status)}
             >
+              {status === "All" ? (
+                <ListMusic
+                  className="status-icon"
+                  size={16}
+                  strokeWidth={2}
+                  aria-hidden="true"
+                />
+              ) : (
+                <StatusIcon status={status} />
+              )}
               {status}
             </button>
           </li>
